@@ -4,19 +4,17 @@ import nltk
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Download stopwords if not already downloaded
+
 try:
     stopwords.words('english')
 except LookupError:
     nltk.download('stopwords')
 
-# Load the trained model and vectorizer
 with open('trained_model.sav', 'rb') as model_file:
     model = pickle.load(model_file)
 with open('vectorizer.sav', 'rb') as vectorizer_file:
     vectorizer = pickle.load(vectorizer_file)
 
-# Stemming function
 from nltk.stem import PorterStemmer
 import re
 
@@ -30,20 +28,20 @@ def stemming(content):
 
 st.title("Twitter Sentiment Analysis")
 
-# User input
+
 user_input = st.text_area("Enter the tweet text:")
 
-# Prediction button
+
 if st.button("Predict Sentiment"):
     if user_input:
-        # Preprocess input
+        
         processed_input = stemming(user_input)
         user_input_transformed = vectorizer.transform([processed_input])
         
-        # Predict sentiment
+        
         prediction = model.predict(user_input_transformed)
         
-        # Display the prediction
+        
         sentiment = "Positive" if prediction[0] == 1 else "Negative"
         st.write(f"Prediction: {sentiment} Sentiment")
     else:
